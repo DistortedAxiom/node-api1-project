@@ -23,9 +23,11 @@ server.get("/", (req, res) => {
 });
 
 server.get("/api/users", (req, res) => {
-    res.json(users);
 
-    if (res.statusCode == 500) {
+    if (res !== null) {
+        res.json(users);
+    }
+    else {
         res.status(500).json({ errorMessage: "The users information could not be retrieved." })
     }
 
@@ -40,8 +42,12 @@ server.post("/api/users", (req, res) => {
         res.status(201).json(newUser);
     }
 
-    else {
+    else if ((((newUser.name).length == 0) && ((newUser.bio).length) == 0)){
         res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
+    }
+
+    else {
+        res.status(500).json({ errorMessage: "There was an error while saving the user to the database" })
     }
 });
 
